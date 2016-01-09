@@ -132,7 +132,7 @@ io.on('connection', function(socket){
 
       var noAnswerNames = [];
       var wrongAnswerNames = [];
-      var removedOnePlayer = (Math.random() < 0.80);
+      var removedOnePlayer = (Math.random() < 0.80) || (userCount < 3);
       console.log('removedOnePlayer', removedOnePlayer);
 
       for (name in userSockets) {
