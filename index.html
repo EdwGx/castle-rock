@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Castle Rock</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <style>
@@ -10,11 +11,14 @@
     background-color: #1abc9c;
     color: #fff;
     font-family: 'Open Sans', sans-serif;
-    height: 100vh;
     overflow:hidden;
     text-align:center;
     padding: 0;
     margin: 0;
+    overflow: hidden;
+  }
+  .main{
+    height: 100vh;
   }
   .Aligner {
     display: flex;
@@ -126,24 +130,26 @@
 </head>
 
 <body data-state="wait">
-  <div class="scene container" id="scene_start">
-    <h1></h1>
-  </div>
-  <div class="scene container" id="scene_show">
-    <table class="answer-table">
-      <tr>
-        <td class="answer top" data-index="0">1</td>
-      </tr>
-      <tr>
-        <td class="answer bottom" data-index="1">2</td>
-      </tr>
-    </table>
-  </div>
-  <div class="scene container" id="scene_result">
-    <h1></h1>
-  </div>
-  <div class="scene container" id="scene_end">
-    <h1></h1>
+  <div class="main">
+    <div class="scene container" id="scene_start">
+      <h1></h1>
+    </div>
+    <div class="scene container" id="scene_show">
+      <table class="answer-table">
+        <tr>
+          <td class="answer top" data-index="0">1</td>
+        </tr>
+        <tr>
+          <td class="answer bottom" data-index="1">2</td>
+        </tr>
+      </table>
+    </div>
+    <div class="scene container" id="scene_result">
+      <h1></h1>
+    </div>
+    <div class="scene container" id="scene_end">
+      <h1></h1>
+    </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
