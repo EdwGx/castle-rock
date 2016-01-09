@@ -198,7 +198,9 @@ io.on('connection', function(socket){
     } else if (socket.hunterName) {
       if (socket.hunterName in userSockets) {
         if (state == "wait") {
-          adminSocket.emit('remove user', socket.number);
+          if (adminSocket){
+            adminSocket.emit('remove user', socket.number);
+          }
         }
 
         userCount -= 1;
