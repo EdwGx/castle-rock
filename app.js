@@ -33,7 +33,7 @@ function resetGame() {
   if (userCount > 0) {
     var keys = Object.keys(userSockets);
     for (var i = 0; i < keys.length; i++) {
-      delete userSockets[keys[i]];
+      userSockets[keys[i]].disconnect();
     }
   }
   userSockets = {};
