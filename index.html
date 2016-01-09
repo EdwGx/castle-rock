@@ -8,8 +8,8 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <style>
   body {
-    background-color: #1abc9c;
-    color: #fff;
+    background-color: #EADBC4;
+    color: #5b4421;
     font-family: 'Open Sans', sans-serif;
     overflow:hidden;
     text-align:center;
@@ -38,6 +38,8 @@
     align-self: flex-end;
   }
   .large-button, .mid-button{
+    color: #fff;
+
     text-align: center;
 
     cursor: pointer;
@@ -105,6 +107,8 @@
     display: block;
   }
   .answer-table{
+    color: #fff;
+
     height: 100%;
     width: 100%;
 
@@ -132,7 +136,9 @@
 <body data-state="wait">
   <div class="main">
     <div class="scene container" id="scene_start">
-      <h1></h1>
+      <div class="Aligner" style="height:100%">
+        <h1 class="Aligner-item"></h1>
+      </div>
     </div>
     <div class="scene container" id="scene_show">
       <table class="answer-table">
@@ -145,10 +151,14 @@
       </table>
     </div>
     <div class="scene container" id="scene_result">
-      <h1></h1>
+      <div class="Aligner" style="height:100%">
+        <h1 class="Aligner-item"></h1>
+      </div>
     </div>
     <div class="scene container" id="scene_end">
-      <h1></h1>
+      <div class="Aligner" style="height:100%">
+        <h1 class="Aligner-item"></h1>
+      </div>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

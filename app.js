@@ -24,11 +24,10 @@ function resetGame() {
     ["Ralph calls you a theif","Stab him","Talk to him"],
     ["Your Cheif is fighting with your enemy","Cheer for your Cheif","Stop the fighting"],
     ["Your enemy stops fighting, and explains to you smoke is the only way to leave the island", "Send them back", "Listen to them"],
-    ["Your Cheif asks you to tie Sam and Eric up","Tie them up","Refuse"],
     ["Your Cheif shouts you to tie your enemies up","Tie them up","Refuse"],
     ["Piggy shouts, \"I got th conch!\"","Throw stones","Slience"],
     ["Your enemy says you are hunting and breaking things up","Yell at him","He is right"],
-    ["A great rock can be dropped on your enemy", "Let the rock drop", "No"],
+    ["A rock can be dropped on your enemy", "Let the rock fall", "No"],
     ["Another enemy is running away", "Throw spears at him", "Let him go"]
   ];
 
@@ -93,7 +92,7 @@ io.on('connection', function(socket){
           for (var i = 0; i < arr.length; i++){
             var userSc = userSockets[arr[i][1]];
             if (arr[i][0] == highest) {
-              userSc.emit('end','You have the highest score!');
+              userSc.emit('end', userSc.hunterName + '<br>You have the highest score!');
               userSc.disconnect();
               winnerNames.push(arr[i][1]);
             } else {

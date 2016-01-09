@@ -5,10 +5,11 @@
   <meta charset="utf-8">
   <title>Dashboard</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
   <style>
   body {
-    background-color: #1abc9c;
-    color: #fff;
+    background-color: #EADBC4;
+    color: #5b4421;
     font-family: 'Open Sans', sans-serif;
     text-align:center;
   }
@@ -33,6 +34,8 @@
     align-self: flex-end;
   }
   .large-button, .mid-button, .next{
+    color: #fff;
+
     text-align: center;
 
     cursor: pointer;
@@ -90,6 +93,7 @@
     margin-top: 40px;
   }
   .answer{
+    color: #fff;
     width: 70%;
     margin: 30px auto 0 auto;
     font-size: 60px;
@@ -141,6 +145,21 @@
     border: 1px solid white;
     padding: 10px;
   }
+  #scene_result table{
+    width: 100%;
+  }
+  #scene_result td{
+    width: 50%;
+  }
+
+  #r_number1, #r_number2 {
+    font-size: 3em;
+  }
+
+  .ct-chart {
+    width: 50%;
+    margin: 0 auto;
+  }
   </style>
 
 </head>
@@ -172,18 +191,31 @@
     </div>
 
     <div class="container scene" id="scene_result">
-      <div></div>
+      <div>Your enemies are closing in to your tribe</div>
+      <hr/>
+      <table>
+        <tr>
+          <td id="r_answer1">Notify Others</td>
+          <td id="r_answer2">Welcome them</td>
+        </tr>
+        <tr>
+          <td id="r_number1">3</td>
+          <td id="r_number2">2</td>
+        </tr>
+      </table>
       <div class="next">Next</div>
     </div>
 
     <div class="container scene" id="scene_end">
       <h1>Hunter 1 has the highest score</h1>
       <br>
-      <h2>Actual Scores</h2>
+      <h2>Actual</h2>
+      <div class="ct-chart ct-minor-seventh"></div>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
   <script>
     $(function(){
       var socket = io();
@@ -235,7 +267,10 @@
       });
 
       socket.on('ok result', function(msg){
-        var displayString = msg[0][0] + '<br>' + msg[0][1] + ': ' + msg[1][0] + '<br>' + msg[0][2] + ': ' + msg[1][1] + '<br>';
+        var displayString = msg[0][0];
+        if (msg[2].length > 0 || msg[3].length > 0) {
+          displayString += '<br>';
+        }
         for (var i = 0; i < msg[2].length; i++) {
           displayString += '<br>' + msg[2][i] + ' has removed for not choosing.';
         }
@@ -244,6 +279,10 @@
         }
         $('body').attr('data-state','result');
         $('#scene_result div').first().html(displayString);
+        $('#r_answer1').html(msg[0][1]);
+        $('#r_answer2').html(msg[0][2]);
+        $('#r_number1').html(msg[1][0]);
+        $('#r_number2').html(msg[1][1]);
         $('#scene_result *[data-disabled="1"]').attr('data-disabled', '0');
       });
 
@@ -253,12 +292,32 @@
 
         var table = "<table>";
         console.log(results);
+        var labels = [];
+        var series = [];
         for (var i = 0; i < results.length; i++) {
           var r = results[i];
           table += '<tr><td>' + (i + 1) + '. ' + r[0] + '</td>';
           table += '<td>' + r[1] + ' (' + r[3] + ')</td>';
           table += '<td>' + r[2] + ' (' + r[4] + ')</td></tr>';
+
+          labels.push(String(i + 1));
+          if ((r[3]+r[4]) == 0) {
+            series.push(0);
+          } else {
+            series.push(r[3]/(r[3]+r[4]));
+          }
         }
+
+        var data = {
+          labels: labels,
+          series: [series]
+        };
+        console.log(data)
+        new Chartist.Line('.ct-chart', data, {
+          lineSmooth: Chartist.Interpolation.simple(),
+          high: 1.0,
+          low: 0.0
+        });
 
         table += '</table>';
         $('#scene_end').append(table);
