@@ -149,7 +149,7 @@ io.on('connection', function(socket){
           user.emit('reject wrong_answer');
           user.disconnect();
         } else {
-          user.emit('show result', user.score);
+          user.emit('show result', [user.score, (user.results[user.results.length - 1] == 0)]);
         }
       }
       socket.emit('ok result', [current_quesiton, modBallots, noAnswerNames, wrongAnswerNames]);

@@ -88,8 +88,14 @@
   .answer.top{
     background-color: #2ecc71;
   }
+  .answer.top:active{
+    background-color: #27ae60;
+  }
   .answer.bottom{
     background-color: #e74c3c;
+  }
+  .answer.bottom:active{
+    background-color: #c0392b;
   }
   body .scene {
     display: none;
@@ -197,7 +203,11 @@
 
       socket.on('show result', function(msg){
         $('body').attr('data-state','result');
-        $('#scene_result h1').html("Your score is " + msg);
+        if (msg[1]) {
+          $('#scene_result h1').html("Your choice is the majority<br>+1<br>Your score is " + msg[0]);
+        } else {
+          $('#scene_result h1').html("Your choice is the minority<br>+0<br>Your score is " + msg[0]);
+        }
       });
 
       socket.on('end', function(msg){
