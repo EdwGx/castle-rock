@@ -84,27 +84,30 @@ io.on('connection', function(socket){
           var user = userSockets[name];
           arr.push([user.score, user.hunterName])
         }
-        arr.sort();
-        var winnerNames = [];
-        var highest = arr[0][0]
-        for (var i = 0; i < arr.length; i++){
-          var userSc = userSockets[arr[i][1]];
-          if (arr[i][0] == highest) {
-            userSc.emit('end','You have the highest score!');
-            userSc.disconnect();
-            winnerNames.push(arr[i][1]);
+        if (arr.length == 0) {
+          winnersDescription = ''
+        } else {
+          arr.sort();
+          var winnerNames = [];
+          var highest = arr[0][0]
+          for (var i = 0; i < arr.length; i++){
+            var userSc = userSockets[arr[i][1]];
+            if (arr[i][0] == highest) {
+              userSc.emit('end','You have the highest score!');
+              userSc.disconnect();
+              winnerNames.push(arr[i][1]);
+            } else {
+              userSc.emit('end','Thank you for playing');
+              userSc.disconnect();
+            }
+          }
+          var winnersDescription;
+          if (winnerNames.length > 1) {
+            winnersDescription = winnerNames.join(', ') + ' have the highest score!';
           } else {
-            userSc.emit('end','Thank you for playing');
-            userSc.disconnect();
+            winnersDescription = winnerNames[0] + ' has the highest score!';
           }
         }
-        var winnersDescription;
-        if (winnerNames.length > 1) {
-          winnersDescription = winnerNames.join(', ') + ' have the highest score!';
-        } else {
-          winnersDescription = winnerNames[0] + ' has the highest score!';
-        }
-
         socket.emit('end', [winnersDescription, results]);
       }
     });
