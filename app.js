@@ -30,7 +30,12 @@ function resetGame() {
     ["A rock can be dropped on your enemy", "Let the rock fall", "No"],
     ["Another enemy is running away", "Throw spears at him", "Let him go"]
   ];
-
+  if (userCount > 0) {
+    var keys = Object.keys(userSockets);
+    for (var i = 0; i < keys.length; i++) {
+      delete userSockets[keys[i]];
+    }
+  }
   userSockets = {};
   userCount = 0;
   results = [];
