@@ -1,0 +1,270 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <style>
+  body {
+    background-color: #1abc9c;
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    text-align:center;
+  }
+  .main{
+    min-height: 90vh;
+  }
+  .Aligner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Aligner-item {
+    max-width: 50%;
+  }
+
+  .Aligner-item--top {
+    align-self: flex-start;
+  }
+
+  .Aligner-item--bottom {
+    align-self: flex-end;
+  }
+  .large-button, .mid-button, .next{
+    text-align: center;
+
+    cursor: pointer;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+
+    background-color: #2ecc71;
+  }
+  .mid-button{
+    font-size: 50px;
+    line-height: 80px;
+    height: 80px;
+    width: 250px;
+  }
+
+  .next{
+    background-color: #e67e22;
+    font-size: 20px;
+    line-height: 30px;
+    height: 30px;
+    width: 100px;
+    margin: 20px auto 0 auto;
+  }
+  .next:hover{
+    background-color: #d35400;
+  }
+
+  .large-button{
+    font-size: 80px;
+    padding: 20px 60px;
+
+  }
+  .mid-button:hover, .large-button:hover{
+    background-color: #27ae60;
+  }
+  .container{
+    height: 100%;
+  }
+  .hunter{
+    width: 150px;
+    float: left;
+    padding: 20px;
+    font-size: 30px;
+  }
+  .hunter-container{
+    position: relative;
+    overflow: hidden;
+    width: 600px;
+    margin: 0 auto;
+  }
+  #question{
+    font-size: 70px;
+    margin-top: 40px;
+  }
+  .answer{
+    width: 70%;
+    margin: 30px auto 0 auto;
+    font-size: 60px;
+    padding: 30px 0;
+  }
+  .answer.top{
+    background-color: #2ecc71;
+  }
+  .answer.bottom{
+    background-color: #e74c3c;
+  }
+  #scene_result{
+    font-size: 3em;
+  }
+
+  div[data-disabled="1"]{
+    pointer-events: none;
+  }
+  body .scene {
+    display: none;
+  }
+  body[data-state="idle"] #scene_start{
+    display: block;
+  }
+  body[data-state="wait"] #scene_wait{
+    display: block;
+  }
+  body[data-state="show"] #scene_show{
+    display: block;
+  }
+  body[data-state="result"] #scene_result{
+    display: block;
+  }
+  body[data-state="end"] #scene_end{
+    display: block;
+  }
+  #scene_end table{
+    border-collapse: collapse;
+    border: 1px solid white;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+  }
+  #scene_end tr{
+    border: 1px solid white;
+  }
+  #scene_end td{
+    font-size: 1.5em;
+    border: 1px solid white;
+    padding: 10px;
+  }
+  </style>
+
+</head>
+
+<body data-state="idle">
+  <div class="main">
+    <div class="container scene" id="scene_start" style="height:90vh">
+      <div class="Aligner" style="height:100%">
+        <div class="Aligner-item">
+          <div class="large-button">Start</div>
+          <h1>castle-rock.heroku.com</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="container scene" id="scene_wait">
+      <h1>castle-rock.heroku.com</h1>
+      <div class="mid-button" style="margin: 20px auto 40px auto">Start</div>
+      <div class="hunter-container">
+      </div>
+    </div>
+
+    <div class="container scene" id="scene_show">
+      <div id="question">C</div>
+      <div class="answer top">1</div>
+      <div class="answer bottom">2</div>
+      <div class="next">Done</div>
+      <h2 class="submitted">0/0</h2>
+    </div>
+
+    <div class="container scene" id="scene_result">
+      <div></div>
+      <div class="next">Next</div>
+    </div>
+
+    <div class="container scene" id="scene_end">
+      <h1>Hunter 1 has the highest score</h1>
+      <br>
+      <h2>Actual Scores</h2>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script>
+    $(function(){
+      var socket = io();
+      socket.emit('add admin');
+
+      $('#scene_start .large-button').first().click(function(){
+        $(this).attr('data-disabled','1');
+        socket.emit('start wait');
+      })
+
+      $('#scene_wait .mid-button').first().click(function(){
+        $(this).attr('data-disabled','1');
+        socket.emit('start show');
+      })
+
+      $('#scene_show .next').first().click(function(){
+        $(this).attr('data-disabled','1');
+        socket.emit('start result');
+      });
+
+      $('#scene_result .next').click(function(){
+        $(this).attr('data-disabled','1');
+        socket.emit('start show');
+      });
+
+      socket.on('new user', function(msg){
+        $('#scene_wait .hunter-container').append('<div class="hunter h' + msg[1] + '">' + msg[0] + '</div>');
+      });
+
+      socket.on('remove user', function(msg){
+        $('#scene_wait .hunter.h' + msg + '').remove();
+      });
+
+      socket.on('ok wait', function(msg){
+        $('body').attr('data-state','wait');
+      });
+
+      socket.on('ok show', function(msg){
+        $('#question').html(msg[0][0]);
+        $('#scene_show .answer.top').html(msg[0][1]);
+        $('#scene_show .answer.bottom').html(msg[0][2]);
+        $('#scene_show .submitted').html('0/'+msg[1])
+        $('body').attr('data-state','show');
+        $('#scene_show *[data-disabled="1"]').attr('data-disabled', '0');
+      });
+
+      socket.on('new answer', function(msg){
+        $('.submitted').html(msg[0] + '/' + msg[1])
+      });
+
+      socket.on('ok result', function(msg){
+        var displayString = msg[0][0] + '<br>' + msg[0][1] + ': ' + msg[1][0] + '<br>' + msg[0][2] + ': ' + msg[1][1] + '<br>';
+        for (var i = 0; i < msg[2].length; i++) {
+          displayString += '<br>' + msg[2][i] + ' has removed for not choosing.';
+        }
+        for (var i = 0; i < msg[3].length; i++) {
+          displayString += '<br>' + msg[3][i] +' has removed for choosing the minority side.';
+        }
+        $('body').attr('data-state','result');
+        $('#scene_result div').first().html(displayString);
+        $('#scene_result *[data-disabled="1"]').attr('data-disabled', '0');
+      });
+
+      socket.on('end', function(msg){
+        $('#scene_end h1').html(msg[0]);
+        var results = msg[1];
+
+        var table = "<table>";
+        console.log(results);
+        for (var i = 0; i < results.length; i++) {
+          var r = results[i];
+          table += '<tr><td>' + (i + 1) + '. ' + r[0] + '</td>';
+          table += '<td>' + r[1] + ' (' + r[3] + ')</td>';
+          table += '<td>' + r[2] + ' (' + r[4] + ')</td></tr>';
+        }
+
+        table += '</table>';
+        $('#scene_end').append(table);
+        $('body').attr('data-state','end');
+      });
+    });
+  </script>
+</body>
+</html>

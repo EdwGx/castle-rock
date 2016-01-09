@@ -1,0 +1,200 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Castle Rock</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <style>
+  body {
+    background-color: #1abc9c;
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    height: 100vh;
+    overflow:hidden;
+    text-align:center;
+    padding: 0;
+    margin: 0;
+  }
+  .Aligner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Aligner-item {
+    max-width: 50%;
+  }
+
+  .Aligner-item--top {
+    align-self: flex-start;
+  }
+
+  .Aligner-item--bottom {
+    align-self: flex-end;
+  }
+  .large-button, .mid-button{
+    text-align: center;
+
+    cursor: pointer;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+
+    background-color: #2ecc71;
+  }
+  .mid-button{
+    font-size: 50px;
+    line-height: 80px;
+    height: 80px;
+    width: 250px;
+  }
+
+  .large-button{
+    font-size: 80px;
+    padding: 20px 60px;
+
+  }
+  .mid-button:hover, .large-button:hover{
+    background-color: #27ae60;
+  }
+  .container{
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .hunter{
+    width: 150px;
+    float: left;
+    padding: 20px;
+    font-size: 30px;
+  }
+  .hunter-container{
+    position: relative;
+    overflow: hidden;
+    width: 600px;
+    margin: 0 auto;
+  }
+  *[data-disabled="1"]{
+    pointer-events: none;
+  }
+  .answer.top{
+    background-color: #2ecc71;
+  }
+  .answer.bottom{
+    background-color: #e74c3c;
+  }
+  body .scene {
+    display: none;
+  }
+  body[data-state="wait"] #scene_start{
+    display: block;
+  }
+  body[data-state="show"] #scene_show{
+    display: block;
+  }
+  body[data-state="result"] #scene_result{
+    display: block;
+  }
+  body[data-state="end"] #scene_end{
+    display: block;
+  }
+  .answer-table{
+    height: 100%;
+    width: 100%;
+
+    padding: 0;
+    margin: 0;
+  }
+  .answer-table tr{
+    height: 50%;
+
+    padding: 0;
+    margin: 0;
+  }
+  .answer-table td{
+    vertical-align: middle;
+
+    font-size: 3em;
+
+    padding: 0;
+    margin: 0;
+  }
+  </style>
+
+</head>
+
+<body data-state="wait">
+  <div class="scene container" id="scene_start">
+    <h1></h1>
+  </div>
+  <div class="scene container" id="scene_show">
+    <table class="answer-table">
+      <tr>
+        <td class="answer top" data-index="0">1</td>
+      </tr>
+      <tr>
+        <td class="answer bottom" data-index="1">2</td>
+      </tr>
+    </table>
+  </div>
+  <div class="scene container" id="scene_result">
+    <h1></h1>
+  </div>
+  <div class="scene container" id="scene_end">
+    <h1></h1>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script>
+    $(function(){
+      var socket = io();
+      socket.emit('add user');
+
+      socket.on('reject', function(msg){
+        $('#scene_start h1').html("Sorry, you can't join the server right now");
+        socket.disconnect();
+      });
+
+      socket.on('ok user', function(msg){
+        $('#scene_start h1').html("You are " + msg)
+      });
+
+      socket.on('show question', function(msg){
+        $('body').attr('data-state','show');
+        $('#scene_show *[data-disabled="1"]').attr('data-disabled', '0');
+        $('#scene_show .answer.top').html(msg[1]);
+        $('#scene_show .answer.bottom').html(msg[2]);
+      });
+
+
+      socket.on('reject no_answer', function(msg){
+        $('body').attr('data-state','end');
+        $('#scene_end h1').html("You have removed for no choosing");
+      });
+
+      socket.on('reject wrong_answer', function(msg){
+        $('body').attr('data-state','end');
+        $('#scene_end h1').html("You have removed for choosing the minority side.");
+      });
+
+      socket.on('show result', function(msg){
+        $('body').attr('data-state','result');
+        $('#scene_result h1').html("Your score is " + msg);
+      });
+
+      socket.on('end', function(msg){
+        $('body').attr('data-state','end');
+        $('#scene_end h1').html(msg);
+      });
+
+      $('.answer').click(function(){
+        $(this).append(' ✓');
+        $('.answer').attr('data-disabled','1');
+        socket.emit('submit answer',parseInt($(this).attr('data-index')));
+      });
+    });
+  </script>
+</body>
+</html>
