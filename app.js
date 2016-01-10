@@ -21,13 +21,13 @@ function resetGame() {
     ["Ralph blows the conch","Scare him","Talk to him"],
     ["Roger throws a small stone between the twins","Do nothing","Stop him"],
     ["Ralph asks you to return Piggy's glasses","Deny it","Return the glasses"],
-    ["Ralph calls you a theif","Stab him","Talk to him"],
-    ["Your Cheif is fighting with your enemy","Cheer for your Cheif","Stop the fighting"],
-    ["Your Cheif shouts you to tie your enemies up","Tie them up","Refuse"],
-    ["Your enemy shouts, \"I got th conch!\"","Throw stones","Slience"],
+    ["Ralph calls you a thief","Stab him","Talk to him"],
+    ["Your Chief is fighting with your enemy","Cheer for your Chief","Stop the fighting"],
+    ["Your Chief shouts you to tie your enemies up","Tie them up","Refuse"],
+    ["Your enemy shouts, \"I got the conch!\"","Throw stones","Silence"],
     ["Your enemy says you are hunting and breaking things up","Yell at him","He is right"],
     ["A rock can be dropped on your enemy", "Let the rock fall", "No"],
-    ["Another enemy is running away", "Throw spears at him", "Let him go"]
+    ["Another enemy is running away", "Throw spears at him", "Let him escape"]
   ];
   if (userCount > 0) {
     var keys = Object.keys(userSockets);
