@@ -17,15 +17,14 @@ var current_quesiton;
 
 function resetGame() {
   questions = [
-    ["Your enemies are closing in to your tribe","Notify Others","Welcome them"],
+    ["Ralph and Piggy are closing in to your tribe","Notify other hunters","Welcome them"],
     ["Ralph blows the conch","Scare him","Talk to him"],
-    ["Ralph asks for an assembly","Throw a small stone between the twins","Listen to him"],
+    ["Roger throws a small stone between the twins","Do nothing","Stop him"],
     ["Ralph asks you to return Piggy's glasses","Deny it","Return the glasses"],
     ["Ralph calls you a theif","Stab him","Talk to him"],
     ["Your Cheif is fighting with your enemy","Cheer for your Cheif","Stop the fighting"],
-    ["Your enemy stops fighting, and explains to you smoke is the only way to leave the island", "Send them back", "Listen to them"],
     ["Your Cheif shouts you to tie your enemies up","Tie them up","Refuse"],
-    ["Piggy shouts, \"I got th conch!\"","Throw stones","Slience"],
+    ["Your enemy shouts, \"I got th conch!\"","Throw stones","Slience"],
     ["Your enemy says you are hunting and breaking things up","Yell at him","He is right"],
     ["A rock can be dropped on your enemy", "Let the rock fall", "No"],
     ["Another enemy is running away", "Throw spears at him", "Let him go"]
