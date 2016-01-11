@@ -23,7 +23,7 @@ function resetGame() {
     ["Ralph asks you to return Piggy's glasses","Deny it","Return the glasses"],
     ["Ralph calls you a thief","Stab him","Talk to him"],
     ["Your Chief is fighting with your enemy","Cheer for your Chief","Stop the fighting"],
-    ["Your Chief shouts you to tie your enemies up","Tie them up","Refuse"],
+    ["Your Chief shouts at you to tie your enemies up","Tie them up","Refuse"],
     ["Your enemy shouts, \"I got the conch!\"","Throw stones","Silence"],
     ["Your enemy says you are hunting and breaking things up","Yell at him","He is right"],
     ["A rock can be dropped on your enemy", "Let the rock fall", "No"],
